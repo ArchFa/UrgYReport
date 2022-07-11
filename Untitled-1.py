@@ -12,7 +12,7 @@ st.title("Дашборд UrgY")
 ################################### основные вычисления ###################################
 
 # %%
-uploaded_file = st.file_uploader("Выбирете файл")
+count_task = st.file_uploader("Выбирете файл")
 
 
 use_example_file = st.checkbox(
@@ -24,7 +24,7 @@ if use_example_file:
     count_task = "offers_statuses (3).txt"
 
 # использование загруженного файла
-if uploaded_file:
+if count_task:
     df = pd.read_csv(count_task, sep='|')
     df = df.dropna()
 
