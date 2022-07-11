@@ -50,7 +50,7 @@ st.info(
              """
     )
 
-if not uploaded_file or not use_example_file:
+if not count_task or not use_example_file:
         st.stop()
 
 # %%
