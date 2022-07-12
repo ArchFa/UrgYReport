@@ -146,6 +146,22 @@ percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['percenta
 сount_prematch = сount_prematch.reset_index()
 
 # %%
+percentage_tasks_with_response = (
+    df.query('platform != "''" & count_responds > 0')
+    .pivot_table(index=["month"], values='count_prematch', aggfunc='count'))
+percentage_tasks_with_response = percentage_tasks_with_response.reset_index()
+
+
+
+percentage_tasks_with_response = percentage_tasks_with_response.merge(all_task_month, left_on='month', right_on='month')
+percentage_tasks_with_response = percentage_tasks_with_response.rename(columns={'offer_id': 'count_no_prematch'})
+
+
+# рассчет процентов задач через приложение
+percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['count_prematch'] * 100 / percentage_tasks_with_response['count_no_prematch']
+percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].round(2)
+
+# %%
 ################################### графики и отображаемые элементы ###################################
 
 # %%
@@ -193,6 +209,24 @@ cxxxx = px.bar(сount_prematch, x='month', y='count_prematch',
             labels={'month':'Месяц', 'count_prematch':'Количество матчей'},
             text_auto=True)
 st.plotly_chart(cxxxx)
+
+# %%
+percentage_tasks_with_response
+
+
+# bar Процент офферов через приложение
+
+cxxxxx = px.bar(percentage_tasks_with_response, x='month', y='percentage_otklik',
+            height=700,
+            width=1200,
+            title="Процент задач с откликом",
+            labels={'month':'Месяц', 'percentage_otklik':'Процент задач с откликом'},
+            text_auto=True)
+#st.plotly_chart(cxxxxx)
+cxxxxx.show()
+
+# %%
+percentage_tasks_with_response
 
 # %%
 
