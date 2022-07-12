@@ -129,7 +129,8 @@ cx = px.bar(offers_count_month, x='month', y='offer_id',
             labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания'},
             barmode = 'group',
             text_auto=True)
-cx.show()
+st.plotly_chart(cx)
+
 
 # %%
 # bar Процент офферов через приложение
@@ -140,7 +141,8 @@ cxx = px.bar(percentage_tasks_mobile, x='month', y='percentage_mobile',
             title="Процент офферов через приложение",
             labels={'month':'Месяц', 'percentage_mobile':'Процент задач через приложение'},
             text_auto=True)
-cxx.show()
+st.plotly_chart(cxx)
+
 
 # %%
 
