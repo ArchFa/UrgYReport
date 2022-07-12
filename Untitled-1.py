@@ -222,11 +222,7 @@ cxxxxx = px.bar(percentage_tasks_with_response, x='month', y='percentage_otklik'
             title="Процент задач с откликом",
             labels={'month':'Месяц', 'percentage_otklik':'Процент задач с откликом'},
             text_auto=True)
-#st.plotly_chart(cxxxxx)
-cxxxxx.show()
-
-# %%
-percentage_tasks_with_response
+st.plotly_chart(cxxxxx)
 
 # %%
 
