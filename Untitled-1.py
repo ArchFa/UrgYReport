@@ -138,7 +138,7 @@ st.plotly_chart(cx)
 
 cxx = px.bar(percentage_tasks_mobile, x='month', y='percentage_mobile',
             height=700,
-            width=500,
+            width=1200,
             title="Процент офферов через приложение",
             labels={'month':'Месяц', 'percentage_mobile':'Процент задач через приложение'},
             text_auto=True)
