@@ -211,9 +211,6 @@ cxxxx = px.bar(сount_prematch, x='month', y='count_prematch',
 st.plotly_chart(cxxxx)
 
 # %%
-percentage_tasks_with_response
-
-
 # bar Процент офферов через приложение
 
 cxxxxx = px.bar(percentage_tasks_with_response, x='month', y='percentage_otklik',
@@ -222,6 +219,7 @@ cxxxxx = px.bar(percentage_tasks_with_response, x='month', y='percentage_otklik'
             title="Процент задач с откликом",
             labels={'month':'Месяц', 'percentage_otklik':'Процент задач с откликом'},
             text_auto=True)
+cxxxxx.update_yaxes(range=[0, 100])
 st.plotly_chart(cxxxxx)
 
 # %%
