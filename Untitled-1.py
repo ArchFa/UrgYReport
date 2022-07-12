@@ -124,7 +124,8 @@ percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['percenta
 
 cx = px.bar(offers_count_month, x='month', y='offer_id',
             color='platform',
-            height=1300,
+            height=700,
+            width=700,
             title="Количество созданных офферов в месяц",
             labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания'},
             barmode = 'group',
