@@ -251,7 +251,7 @@ fig = px.pie(
 st.plotly_chart(fig)
 
 # %%
-# # bar "Количество созданных офферов в месяц"
+# bar "Количество созданных офферов в месяц"
 
 # cx = px.bar(offers_count_month, x='month_name', y='offer_id',
 #             color='platform',
@@ -280,13 +280,13 @@ st.plotly_chart(fig)
 # st.plotly_chart(cxxx)
 
 # %%
-# bar Процент офферов через приложение
+# # bar Процент офферов через приложение
 
-cxxxx = px.bar(сount_prematch, x='month_name', y='count_prematch',
-            title="Количество матчей",
-            labels={'month_name':'Месяц', 'count_prematch':'Количество матчей'},
-            text_auto=True)
-st.plotly_chart(cxxxx)
+# cxxxx = px.bar(сount_prematch, x='month_name', y='count_prematch',
+#             title="Количество матчей",
+#             labels={'month_name':'Месяц', 'count_prematch':'Количество матчей'},
+#             text_auto=True)
+# st.plotly_chart(cxxxx)
 
 # %%
 # bar отклики и прематчи
