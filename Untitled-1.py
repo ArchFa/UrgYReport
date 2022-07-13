@@ -62,20 +62,20 @@ if not count_task or not use_example_file:
 df['month'] = df['offer_created_at'].dt.month
 
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
+df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
 
-# df = df.dropna()
+df = df.dropna()
 
-# df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
 
-# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-# df['count_responds'] = df['count_responds'].astype(int)
-# df['count_prematch'] = df['count_prematch'].astype(int)
+df['count_responds'] = df['count_responds'].astype(int)
+df['count_prematch'] = df['count_prematch'].astype(int)
 
-# df['platform'] = df['platform'].str.strip()
-# df['month'] = df['offer_created_at'].dt.month
+df['platform'] = df['platform'].str.strip()
+df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
@@ -98,8 +98,6 @@ df['month_name'] = df['month'].apply(lambda x: months[x])
 ################################## информация о текущем месяце, сравнение с предыдущем
 
 
-
-# %%
 last_month = df['month'].max()
 pre_last_month = df['month'].max() - 1
 
@@ -133,23 +131,21 @@ difference_web = str(count_task_last_month_web - count_task_pre_last_month_web)
 
 
 # %%
+################################## вычисления для построения pie за последний месяц
 
 
-# %%
-
-
-# %%
-
-
-# %%
 count_task_platform_last_monht = (
-    df.query('month == @last_month')
+    df.query('month == @last_month & platform != "''"')
     .pivot_table(index=["platform"], values='offer_id', aggfunc='count'))
 
 count_task_platform_last_monht = count_task_platform_last_monht.reset_index()
-count_task_platform_last_monht.columns = ['platform', 'count_task']
+count_task_platform_last_monht.columns = ['platformm', 'count_task']
 
-count_task_platform_last_monht = count_task_platform_last_monht.query('platform != "''"')
+
+count_task_platform_last_monht['all'] = df.query('month == @last_month').count()[0]
+count_task_platform_last_monht['persent'] = (count_task_platform_last_monht['count_task'] * 100 / count_task_platform_last_monht['all']).round(2)
+count_task_platform_last_monht['persent'] = count_task_platform_last_monht['persent'].astype(str)
+count_task_platform_last_monht['platform'] = count_task_platform_last_monht['platformm'] + ' ' + count_task_platform_last_monht['persent'] + '%'
 
 # %%
 # ################################## Количество созданных офферов в месяц с разделением по платформе
@@ -235,6 +231,9 @@ col4.metric("Admins", count_task_last_month_admins, difference_admins)
 col5.metric("WEB", count_task_last_month_web, difference_web)
 
 # %%
+# pie с процентом задач по платформам
+
+
 fig = px.pie(
     count_task_platform_last_monht,
     values='count_task',
