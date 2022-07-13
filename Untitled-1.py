@@ -235,8 +235,6 @@ col5.metric("WEB", count_task_last_month_web, difference_web)
 
 cx = px.bar(offers_count_month, x='month_name', y='offer_id',
             color='platform',
-            height=700,
-            width=1200,
             title="Количество созданных офферов в месяц",
             labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания', 'month_name':'Месяц'},
             barmode = 'group',
