@@ -213,6 +213,21 @@ percentage_tasks_mobile.columns = ['month_name', 'mobile', 'all']
 percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['mobile'] * 100 / percentage_tasks_mobile['all']
 percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['percentage_mobile'].round(2)
 
+
+percentage_tasks_mobile['monthh'] = percentage_tasks_mobile['month_name'].apply(lambda x: monthss[x])
+percentage_tasks_mobile = percentage_tasks_mobile.sort_values(by=['monthh'])
+percentage_tasks_mobile = percentage_tasks_mobile.reset_index()
+
+####
+last_m = max(percentage_tasks_mobile.index)
+pre_last_m = last_m - 1
+
+persent_mob_last = str(percentage_tasks_mobile['percentage_mobile'][last_m]) + '%'
+dif = percentage_tasks_mobile['percentage_mobile'][last_m] - percentage_tasks_mobile['percentage_mobile'][pre_last_m]
+dif = dif.round(2)
+
+
+
 # %%
 # рассчеты для графика количества откликов и прематчей
 
@@ -260,7 +275,7 @@ col2.metric("Android", count_task_last_month_android, difference_android)
 col3.metric("iOS", count_task_last_month_ios, difference_ios)
 col4.metric("Admins", count_task_last_month_admins, difference_admins)
 col5.metric("WEB", count_task_last_month_web, difference_web)
-col6.metric("Mobile", count_task_last_month_mob, difference_mob)
+col6.metric("Mobile", persent_mob_last, dif)
 
 # %%
 # pie с процентом задач по платформам
