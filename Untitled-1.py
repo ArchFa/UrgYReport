@@ -221,6 +221,8 @@ percentage_tasks_with_response = percentage_tasks_with_response.rename(columns={
 # рассчет процентов задач через приложение
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['count_prematch'] * 100 / percentage_tasks_with_response['count_no_prematch']
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].round(0)
+percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].astype(str)
+percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'] + ' ' + '%'
 
 # %%
 ################################### графики и отображаемые элементы ###################################
@@ -294,10 +296,11 @@ st.plotly_chart(fig)
 cxdd = px.bar(сount_prematch_responds, x='month_name', y=['count_prematch','count_responds'],
             title="Количество созданных офферов в месяц",
             labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания', 'month_name':'Месяц'},
-            barmode='overlay',
+            barmode='group',
             opacity=0.75,
             text_auto=True)
-st.plotly_chart(cxdd)
+cxdd.show()
+
 
 # %%
 # bar Процент задач с откликом
@@ -308,5 +311,11 @@ cxxxxx = px.bar(percentage_tasks_with_response, x='month_name', y='percentage_ot
             text_auto=True)
 cxxxxx.update_yaxes(range=[0, 100])
 st.plotly_chart(cxxxxx)
+
+# %%
+
+
+# %%
+
 
 
