@@ -64,20 +64,20 @@ df['month'] = df['offer_created_at'].dt.month
 
 
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
+df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
 
-# df = df.dropna()
+df = df.dropna()
 
-# df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
 
-# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-# df['count_responds'] = df['count_responds'].astype(int)
-# df['count_prematch'] = df['count_prematch'].astype(int)
+df['count_responds'] = df['count_responds'].astype(int)
+df['count_prematch'] = df['count_prematch'].astype(int)
 
-# df['platform'] = df['platform'].str.strip()
-# df['month'] = df['offer_created_at'].dt.month
+df['platform'] = df['platform'].str.strip()
+df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
@@ -227,7 +227,6 @@ dif = percentage_tasks_mobile['percentage_mobile'][last_m] - percentage_tasks_mo
 dif = dif.round(2)
 
 
-
 # %%
 # рассчеты для графика количества откликов и прематчей
 
@@ -334,8 +333,8 @@ st.plotly_chart(fig)
 # bar отклики и прематчи
 
 cxdd = px.bar(сount_prematch_responds, x='month_name', y=['count_prematch','count_responds'],
-            title="Количество созданных офферов в месяц",
-            labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания', 'month_name':'Месяц'},
+            title="Количество премктчей и матчей",
+            labels={'variable':'Тип отклика', 'value':'Количество', 'month_name':'Месяц'},
             barmode='group',
             text_auto=True)
 st.plotly_chart(cxdd)
