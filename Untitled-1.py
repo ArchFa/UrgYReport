@@ -1,3 +1,4 @@
+
 # %%
 import pandas as pd
 import streamlit as st
@@ -64,20 +65,20 @@ df['month'] = df['offer_created_at'].dt.month
 
 
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
+df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
 
-# df = df.dropna()
+df = df.dropna()
 
-# df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
 
-# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-# df['count_responds'] = df['count_responds'].astype(int)
-# df['count_prematch'] = df['count_prematch'].astype(int)
+df['count_responds'] = df['count_responds'].astype(int)
+df['count_prematch'] = df['count_prematch'].astype(int)
 
-# df['platform'] = df['platform'].str.strip()
-# df['month'] = df['offer_created_at'].dt.month
+df['platform'] = df['platform'].str.strip()
+df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
@@ -119,6 +120,8 @@ monthss = {
 last_month = df['month'].max()
 pre_last_month = df['month'].max() - 1
 
+df_mob = df.query('platform == "ios" | platform == "android"')
+
 # общее количество задач
 count_task_last_month_all = df.query('month == @last_month').count()[0]
 count_task_pre_last_month_all = df.query('month == @pre_last_month').count()[0]
@@ -147,6 +150,10 @@ count_task_last_month_web = df.query('month == @last_month & platform == "web"')
 count_task_pre_last_month_web = df.query('month == @pre_last_month & platform == "web"').count()[0]
 difference_web = str(count_task_last_month_web - count_task_pre_last_month_web)
 
+# задачи через mobile
+count_task_last_month_mob = df_mob.query('month == @last_month').count()[0]
+count_task_pre_last_month_mob = df_mob.query('month == @pre_last_month').count()[0]
+difference_mob = str(count_task_last_month_mob - count_task_pre_last_month_mob)
 
 # %%
 ################################## вычисления для построения pie за последний месяц
@@ -243,23 +250,18 @@ percentage_tasks_with_response['monthh'] = percentage_tasks_with_response['month
 percentage_tasks_with_response = percentage_tasks_with_response.sort_values(by=['monthh'])
 
 # %%
-percentage_tasks_with_response
-
-# %%
-
-
-# %%
 ################################### графики и отображаемые элементы ###################################
 
 # %%
 # метрики с количеством задач
 
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 col1.metric("All", count_task_last_month_all, difference_all)
 col2.metric("Android", count_task_last_month_android, difference_android)
 col3.metric("iOS", count_task_last_month_ios, difference_ios)
 col4.metric("Admins", count_task_last_month_admins, difference_admins)
 col5.metric("WEB", count_task_last_month_web, difference_web)
+col6.metric("Mobile", count_task_last_month_mob, difference_mob)
 
 # %%
 # pie с процентом задач по платформам
@@ -321,7 +323,6 @@ cxdd = px.bar(сount_prematch_responds, x='month_name', y=['count_prematch','cou
             title="Количество созданных офферов в месяц",
             labels={'offer_id':'Количество созданных офферов', 'platform':'Платформа создания', 'month_name':'Месяц'},
             barmode='group',
-            opacity=0.75,
             text_auto=True)
 st.plotly_chart(cxdd)
 
@@ -335,8 +336,5 @@ figi.update_layout(
                   xaxis_title="Месяц",
                   yaxis_title="Процент задач с откликом",)
 st.plotly_chart(figi)
-
-# %%
-
 
 
