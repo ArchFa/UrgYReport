@@ -62,21 +62,22 @@ if not count_task or not use_example_file:
 # %%
 df['month'] = df['offer_created_at'].dt.month
 
+
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
+df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
 
-# df = df.dropna()
+df = df.dropna()
 
-# df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
 
-# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-# df['count_responds'] = df['count_responds'].astype(int)
-# df['count_prematch'] = df['count_prematch'].astype(int)
+df['count_responds'] = df['count_responds'].astype(int)
+df['count_prematch'] = df['count_prematch'].astype(int)
 
-# df['platform'] = df['platform'].str.strip()
-# df['month'] = df['offer_created_at'].dt.month
+df['platform'] = df['platform'].str.strip()
+df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
@@ -93,7 +94,24 @@ months = {
         11: 'Ноябрь',
         12: 'Декабрь'
     }
+
 df['month_name'] = df['month'].apply(lambda x: months[x])
+
+
+monthss = {
+        'Январь': 1,
+        'Февраль': 2,
+        'Март': 3,
+        'Апрель': 4,
+        'Май': 5,
+        'Июнь': 6,
+        'Июль': 7,
+        'Август': 8,
+        'Сентябрь': 9,
+        'Октябрь': 10,
+        'Ноябрь': 11,
+        'Декабрь': 12
+    }
 
 # %%
 ################################## информация о текущем месяце, сравнение с предыдущем
@@ -191,7 +209,7 @@ percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['mobile']
 percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['percentage_mobile'].round(2)
 
 # %%
-# рассчеты для графика 
+# рассчеты для графика количества откликов и прематчей
 
 сount_responds = (
     df.query('platform != "''"')
@@ -204,7 +222,8 @@ percentage_tasks_mobile['percentage_mobile'] = percentage_tasks_mobile['percenta
 сount_prematch = сount_prematch.reset_index()
 
 сount_prematch_responds = сount_prematch.merge(сount_responds, left_on='month_name', right_on='month_name')
-
+сount_prematch_responds['monthh'] = сount_prematch_responds['month_name'].apply(lambda x: monthss[x])
+сount_prematch_responds = сount_prematch_responds.sort_values(by=['monthh'])
 
 # %%
 percentage_tasks_with_response = (
@@ -221,8 +240,6 @@ percentage_tasks_with_response = percentage_tasks_with_response.rename(columns={
 # рассчет процентов задач через приложение
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['count_prematch'] * 100 / percentage_tasks_with_response['count_no_prematch']
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].round(0)
-percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].astype(str)
-percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'] + ' ' + '%'
 
 # %%
 ################################### графики и отображаемые элементы ###################################
@@ -308,12 +325,13 @@ cxdd.show()
 cxxxxx = px.bar(percentage_tasks_with_response, x='month_name', y='percentage_otklik',
             title="Процент задач с откликом",
             labels={'month_name':'Месяц', 'percentage_otklik':'Процент задач с откликом'},
-            text_auto=True)
+            text_auto=True,)
 cxxxxx.update_yaxes(range=[0, 100])
 st.plotly_chart(cxxxxx)
+cxxxxx.show()
 
 # %%
-
+percentage_tasks_with_response
 
 # %%
 
