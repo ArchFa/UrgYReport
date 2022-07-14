@@ -239,6 +239,14 @@ percentage_tasks_with_response = percentage_tasks_with_response.rename(columns={
 # рассчет процентов задач через приложение
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['count_prematch'] * 100 / percentage_tasks_with_response['count_no_prematch']
 percentage_tasks_with_response['percentage_otklik'] = percentage_tasks_with_response['percentage_otklik'].round(0)
+percentage_tasks_with_response['monthh'] = percentage_tasks_with_response['month_name'].apply(lambda x: monthss[x])
+percentage_tasks_with_response = percentage_tasks_with_response.sort_values(by=['monthh'])
+
+# %%
+percentage_tasks_with_response
+
+# %%
+
 
 # %%
 ################################### графики и отображаемые элементы ###################################
@@ -315,22 +323,18 @@ cxdd = px.bar(сount_prematch_responds, x='month_name', y=['count_prematch','cou
             barmode='group',
             opacity=0.75,
             text_auto=True)
-cxdd.show()
-
+st.plotly_chart(cxdd)
 
 # %%
 # bar Процент задач с откликом
 
-cxxxxx = px.bar(percentage_tasks_with_response, x='month_name', y='percentage_otklik',
-            title="Процент задач с откликом",
-            labels={'month_name':'Месяц', 'percentage_otklik':'Процент задач с откликом'},
-            text_auto=True,)
-cxxxxx.update_yaxes(range=[0, 100])
-st.plotly_chart(cxxxxx)
-cxxxxx.show()
 
-# %%
-percentage_tasks_with_response
+figi = go.Figure([go.Bar(x=percentage_tasks_with_response['month_name'], y=percentage_tasks_with_response['percentage_otklik'], texttemplate = "%{y}%")])
+figi.update_layout(
+                  title="Процент задач с откликом",
+                  xaxis_title="Месяц",
+                  yaxis_title="Процент задач с откликом",)
+st.plotly_chart(figi)
 
 # %%
 
