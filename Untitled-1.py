@@ -20,12 +20,12 @@ count_task = st.file_uploader("Выбирете файл")
 
 
 use_example_file = st.checkbox(
-    "Использовать пример выгрузки", False, help="Будет использована базовая выгрузка, c 1 апреля по 1 июля"
+    "Использовать пример выгрузки", False, help="Будет использована базовая выгрузка, c 1 апреля по 1 августа"
 )
 
 # использование примера файла
 if use_example_file:
-    count_task = "offers_statuses_04_01_07_01.txt"
+    count_task = "offers_statuses_04_01_08_01.txt"
 
 # использование загруженного файла
 if count_task:
