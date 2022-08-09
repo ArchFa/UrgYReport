@@ -38,7 +38,7 @@ if count_task:
                      'Платформа': 'platform',
                      'Способ связи': 'communication_type',
                      'Кол-во откликов': 'count_responds',
-                     'Кол-во прематчей': 'count_prematch'}, inplace = True)
+                     'Кол-во матчей': 'count_prematch'}, inplace = True)
 
     df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
     df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
@@ -70,25 +70,25 @@ df['month'] = df['offer_created_at'].dt.month
 
 
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
+df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
 
-# df = df.dropna()
+df = df.dropna()
 
-# df.rename(columns = {'id задачи' : 'offer_id',
-#                      'Дата создания' : 'offer_created_at',
-#                      'Платформа': 'platform',
-#                      'Способ связи': 'communication_type',
-#                      'Кол-во откликов': 'count_responds',
-#                      'Кол-во матчей': 'count_prematch'}, inplace = True)
+df.rename(columns = {'id задачи' : 'offer_id',
+                     'Дата создания' : 'offer_created_at',
+                     'Платформа': 'platform',
+                     'Способ связи': 'communication_type',
+                     'Кол-во откликов': 'count_responds',
+                     'Кол-во матчей': 'count_prematch'}, inplace = True)
 
-# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-# df['count_responds'] = df['count_responds'].astype(int)
-# df['count_prematch'] = df['count_prematch'].astype(int)
+df['count_responds'] = df['count_responds'].astype(int)
+df['count_prematch'] = df['count_prematch'].astype(int)
 
-# df['platform'] = df['platform'].str.strip()
-# df['month'] = df['offer_created_at'].dt.month
+df['platform'] = df['platform'].str.strip()
+df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
@@ -354,7 +354,6 @@ st.plotly_chart(cxdd)
 # %%
 # bar Процент задач с откликом
 
-
 figi = go.Figure([go.Bar(x=percentage_tasks_with_response['month_name'], y=percentage_tasks_with_response['percentage_otklik'], texttemplate = "%{y}%")])
 figi.update_layout(
                   title="Процент задач с откликом",
@@ -362,7 +361,44 @@ figi.update_layout(
                   yaxis_title="Процент задач с откликом",)
 st.plotly_chart(figi)
 
-# %%
 
+# %%
+df_mobile_only = df_mobile.query('platform == "mobile"')
+
+сount_in_app = (
+    df_mobile_only.query('communication_type == "через приложение"')
+    .pivot_table(index=["month_name"], values='count_responds', aggfunc='count'))
+сount_in_app = сount_in_app.reset_index()
+
+сount_in_phone = (
+    df_mobile_only.query('communication_type == "через телефон"')
+    .pivot_table(index=["month_name"], values='count_responds', aggfunc='count'))
+сount_in_phone = сount_in_phone.reset_index()
+
+type_comm = сount_in_app.merge(сount_in_phone, left_on='month_name', right_on='month_name')
+type_comm['monthh'] = type_comm['month_name'].apply(lambda x: monthss[x])
+type_comm = type_comm.sort_values(by=['monthh'])
+type_comm['all'] = type_comm['count_responds_x'] + type_comm['count_responds_y']
+
+type_comm['percent_phone'] = type_comm['count_responds_y'] * 100 / type_comm['all']
+type_comm['percent_phone'] = type_comm['percent_phone'].round(2)
+
+type_comm['percent_app'] = type_comm['count_responds_x'] * 100 / type_comm['all']
+type_comm['percent_app'] = type_comm['percent_app'].round(2)
+
+
+figj = go.Figure(data=[
+    go.Bar(name='Через телефон', x=type_comm['month_name'], y=type_comm['percent_phone'], texttemplate = "%{y}%"),
+    go.Bar(name='Через приложение',x=type_comm['month_name'], y=type_comm['percent_app'], texttemplate = "%{y}%"),
+])
+# Change the bar mode
+
+figj.update_layout(
+                  title="Распределение типов связи",
+                  xaxis_title="Месяц",
+                  yaxis_title="Процент типа связи",
+                  barmode='group',)
+
+st.plotly_chart(figj)
 
 
