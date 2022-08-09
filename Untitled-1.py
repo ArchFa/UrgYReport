@@ -25,7 +25,7 @@ use_example_file = st.checkbox(
 
 # использование примера файла
 if use_example_file:
-    count_task = "tasks_report(2022-08-08T12_16_42.719Z).csv"
+    count_task = "tasks_report(2022-08-09T09_17_08.636Z).csv"
 
 
 # использование загруженного файла
@@ -344,11 +344,12 @@ st.plotly_chart(fig)
 # bar отклики и прематчи
 
 cxdd = px.bar(сount_prematch_responds, x='month_name', y=['count_prematch','count_responds'],
-            title="Количество премктчей и матчей",
+            title="Количество прематчей и матчей",
             labels={'variable':'Тип отклика', 'value':'Количество', 'month_name':'Месяц'},
             barmode='group',
             text_auto=True)
 st.plotly_chart(cxdd)
+#cxdd.show()
 
 # %%
 # bar Процент задач с откликом
@@ -360,5 +361,8 @@ figi.update_layout(
                   xaxis_title="Месяц",
                   yaxis_title="Процент задач с откликом",)
 st.plotly_chart(figi)
+
+# %%
+
 
 
