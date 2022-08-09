@@ -38,7 +38,7 @@ if count_task:
                      'Платформа': 'platform',
                      'Способ связи': 'communication_type',
                      'Кол-во откликов': 'count_responds',
-                     'Кол-во матчей': 'count_prematch'}, inplace = True)
+                     'Кол-во прематчей': 'count_prematch'}, inplace = True)
 
     df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
     df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
