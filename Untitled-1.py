@@ -25,14 +25,20 @@ use_example_file = st.checkbox(
 
 # использование примера файла
 if use_example_file:
-    count_task = "offers_statuses_04_01_08_01.txt"
+    count_task = "tasks_report(2022-08-08T12_16_42.719Z).csv"
+
 
 # использование загруженного файла
 if count_task:
     df = pd.read_csv(count_task, sep='|')
     df = df.dropna()
 
-    df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+    df.rename(columns = {'id задачи' : 'offer_id',
+                     'Дата создания' : 'offer_created_at',
+                     'Платформа': 'platform',
+                     'Способ связи': 'communication_type',
+                     'Кол-во откликов': 'count_responds',
+                     'Кол-во матчей': 'count_prematch'}, inplace = True)
 
     df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
     df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
@@ -64,11 +70,16 @@ df['month'] = df['offer_created_at'].dt.month
 
 
 # %%
-# df = pd.read_csv("/Users/arturfattahov/Downloads/Telegram Desktop/offers_statuses_04_01_07_01.txt", sep='|')
+# df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
 
 # df = df.dropna()
 
-# df.columns = ['offer_id', 'offer_created_at','platform','count_responds', 'count_prematch']
+# df.rename(columns = {'id задачи' : 'offer_id',
+#                      'Дата создания' : 'offer_created_at',
+#                      'Платформа': 'platform',
+#                      'Способ связи': 'communication_type',
+#                      'Кол-во откликов': 'count_responds',
+#                      'Кол-во матчей': 'count_prematch'}, inplace = True)
 
 # df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
 # df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
@@ -159,7 +170,7 @@ difference_mob = str(count_task_last_month_mob - count_task_pre_last_month_mob)
 
 
 count_task_platform_last_monht = (
-    df.query('month == @last_month & platform != "''"')
+    df.query('month == @last_month & platform != "-"')
     .pivot_table(index=["platform"], values='offer_id', aggfunc='count'))
 
 count_task_platform_last_monht = count_task_platform_last_monht.reset_index()
@@ -192,7 +203,7 @@ df_mobile['platform'] = np.where((df_mobile.platform == "android"), "mobile", df
 
 # датафрейм со всеми задачами в месяц, без разделения по платформам
 all_task_month = (
-    df_mobile.query('platform != "''"')
+    df_mobile.query('platform != "-"')
     .pivot_table(index=["month_name"], values='offer_id', aggfunc='count'))
 all_task_month = all_task_month.reset_index()
 
@@ -231,12 +242,12 @@ dif = dif.round(2)
 # рассчеты для графика количества откликов и прематчей
 
 сount_responds = (
-    df.query('platform != "''"')
+    df.query('platform != "-"')
     .pivot_table(index=["month_name"], values='count_responds', aggfunc='sum'))
 сount_responds = сount_responds.reset_index()
 
 сount_prematch = (
-    df.query('platform != "''"')
+    df.query('platform != "-"')
     .pivot_table(index=["month_name"], values='count_prematch', aggfunc='sum'))
 сount_prematch = сount_prematch.reset_index()
 
@@ -246,7 +257,7 @@ dif = dif.round(2)
 
 # %%
 percentage_tasks_with_response = (
-    df.query('platform != "''" & count_responds > 0')
+    df.query('platform != "-" & count_responds > 0')
     .pivot_table(index=["month_name"], values='count_prematch', aggfunc='count'))
 percentage_tasks_with_response = percentage_tasks_with_response.reset_index()
 
