@@ -70,25 +70,25 @@ df['month'] = df['offer_created_at'].dt.month
 
 
 # %%
-df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
+# df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
 
-df = df.dropna()
+# df = df.dropna()
 
-df.rename(columns = {'id задачи' : 'offer_id',
-                     'Дата создания' : 'offer_created_at',
-                     'Платформа': 'platform',
-                     'Способ связи': 'communication_type',
-                     'Кол-во откликов': 'count_responds',
-                     'Кол-во матчей': 'count_prematch'}, inplace = True)
+# df.rename(columns = {'id задачи' : 'offer_id',
+#                      'Дата создания' : 'offer_created_at',
+#                      'Платформа': 'platform',
+#                      'Способ связи': 'communication_type',
+#                      'Кол-во откликов': 'count_responds',
+#                      'Кол-во матчей': 'count_prematch'}, inplace = True)
 
-df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
-df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
+# df['offer_created_at'] = pd.to_datetime(df['offer_created_at'])
+# df.offer_created_at = df.offer_created_at.values.astype('M8[D]')
 
-df['count_responds'] = df['count_responds'].astype(int)
-df['count_prematch'] = df['count_prematch'].astype(int)
+# df['count_responds'] = df['count_responds'].astype(int)
+# df['count_prematch'] = df['count_prematch'].astype(int)
 
-df['platform'] = df['platform'].str.strip()
-df['month'] = df['offer_created_at'].dt.month
+# df['platform'] = df['platform'].str.strip()
+# df['month'] = df['offer_created_at'].dt.month
 
 # %%
 months = {
