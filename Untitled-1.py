@@ -68,7 +68,7 @@ if not count_task or not use_example_file:
 # %%
 df['month'] = df['offer_created_at'].dt.month
 
-
+#
 # %%
 # df = pd.read_csv("/Users/arturfattahov/Downloads/tasks_report(2022-08-08T12_16_42.719Z).csv", sep='|')
 
